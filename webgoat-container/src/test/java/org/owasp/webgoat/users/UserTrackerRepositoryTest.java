@@ -2,22 +2,21 @@ package org.owasp.webgoat.users;
 
 import org.assertj.core.api.Assertions;
 import org.assertj.core.util.Lists;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.owasp.webgoat.lessons.Assignment;
 import org.owasp.webgoat.lessons.Category;
-import org.owasp.webgoat.lessons.NewLesson;
+import org.owasp.webgoat.lessons.Lesson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
 @DataJpaTest
-@RunWith(SpringRunner.class)
-public class UserTrackerRepositoryTest {
+@ActiveProfiles({"test", "webgoat"})
+class UserTrackerRepositoryTest {
 
-    private class TestLesson extends NewLesson {
+    private class TestLesson extends Lesson {
 
         @Override
         public Category getDefaultCategory() {
@@ -25,22 +24,7 @@ public class UserTrackerRepositoryTest {
         }
 
         @Override
-        public List<String> getHints() {
-            return Lists.newArrayList();
-        }
-
-        @Override
-        public Integer getDefaultRanking() {
-            return 12;
-        }
-
-        @Override
         public String getTitle() {
-            return "test";
-        }
-
-        @Override
-        public String getId() {
             return "test";
         }
 
@@ -54,11 +38,9 @@ public class UserTrackerRepositoryTest {
     @Autowired
     private UserTrackerRepository userTrackerRepository;
 
-
     @Test
-    public void saveUserTracker() {
+    void saveUserTracker() {
         UserTracker userTracker = new UserTracker("test");
-        LessonTracker lessonTracker = userTracker.getLessonTracker(new TestLesson());
 
         userTrackerRepository.save(userTracker);
 
@@ -67,7 +49,7 @@ public class UserTrackerRepositoryTest {
     }
 
     @Test
-    public void solvedAssignmentsShouldBeSaved() {
+    void solvedAssignmentsShouldBeSaved() {
         UserTracker userTracker = new UserTracker("test");
         TestLesson lesson = new TestLesson();
         userTracker.getLessonTracker(lesson);
@@ -82,7 +64,7 @@ public class UserTrackerRepositoryTest {
     }
 
     @Test
-    public void saveAndLoadShouldHaveCorrectNumberOfAttemtps() {
+    void saveAndLoadShouldHaveCorrectNumberOfAttempts() {
         UserTracker userTracker = new UserTracker("test");
         TestLesson lesson = new TestLesson();
         userTracker.getLessonTracker(lesson);
